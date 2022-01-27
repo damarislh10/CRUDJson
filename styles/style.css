@@ -1,11 +1,13 @@
-.containerCard{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    text-align: center;
+.containerCard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  text-align: center;
 }
 
-#img{
-    width: 250px;
-    margin: auto;
+#img {
+  width: 150px;
+  height: 200px;
+  margin: auto;
+  border: 1px solid #000;
 }

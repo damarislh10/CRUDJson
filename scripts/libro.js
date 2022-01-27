@@ -14,14 +14,14 @@ const getLibro = async () => {
     const { id, nombre, url, autor, editorial } = libro;
     container.innerHTML += `
         <div class="card mt-5" style="width: 18rem;">
-        <img src="${url}" id="img"  class="card-img-top" alt="...">
+        <img src="${url}" id="img"  class="mt-3" alt="...">
         <div class="card-body">
             <h5 class="card-title">${nombre}
             </h5>
             <h5>${autor}</h5>
             <h6>${editorial}</h6>
 
-            <button id=${id} class="btn btn-danger btn-sm">
+            <button id=${id} class="btn btn-danger btn-sm w-100 mb-3">
             Borrar
         </button>
         </div>
