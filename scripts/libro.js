@@ -32,72 +32,84 @@ const getLibro = async () => {
 
 document.addEventListener("DOMContentLoaded", getLibro);
 
-
 // eliminar
 
-container.addEventListener('click', async (e) =>{
-    const btnEliminar = e.target.classList.contains('btn-danger');
+container.addEventListener("click", async (e) => {
+  const btnEliminar = e.target.classList.contains("btn-danger");
 
-    if(btnEliminar){
-        const id = e.target.id;
-        await fetch(endpoint + id, {
-            method:'DELETE'
-        })
-    }
+  if (btnEliminar) {
+    const id = e.target.id;
+    await fetch(endpoint + id, {
+      method: "DELETE",
+    });
+  }
+});
 
-})
+const capturarDatos = () => {
+  const url = document.getElementById("inputUrl").value;
+  const nombre = document.getElementById("inputNombre").value;
+  const autor = document.getElementById("inputAutor").value;
+  const editorial = document.getElementById("inputEditorial").value;
 
+  const libro = {
+    url,
+    nombre,
+    autor,
+    editorial,
+  };
 
-const capturarDatos = () =>{
-    const url = document.getElementById('inputUrl').value;
-    const nombre = document.getElementById('inputNombre').value;
-    const autor = document.getElementById('inputAutor').value;
-    const editorial = document.getElementById('inputEditorial').value;
+  return libro;
+};
 
-    const libro = {
-        url,
-        nombre,
-        autor,
-        editorial
-    }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    return libro
+  const objeto = capturarDatos();
 
-}
+  await fetch(endpoint, {
+    method: "POST",
+    body: JSON.stringify(objeto),
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+  });
+});
 
-form.addEventListener('submit', async (e) =>{
-    e.preventDefault();
+btnBuscar.addEventListener("click", async () => {
+  const inputBuscar = document.getElementById("inputId").value;
+  const resp = await fetch(endpoint);
+  const data = await resp.json();
 
-    const objeto = capturarDatos();
+  const buscado = data.find((l) => Number(l.id) === Number(inputBuscar));
 
-    await fetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify(objeto),
-        headers: {
-            "Content-Type": "application/json;charset=utf-8"
-        }
-    })
-})
+  if (buscado !== undefined) {
+    const { id, nombre, url, autor, editorial } = buscado;
 
+    document.getElementById("inputUrl").value = url;
+    document.getElementById("inputNombre").value = nombre;
+    document.getElementById("inputAutor").value = autor;
+    document.getElementById("inputEditorial").value = editorial;
 
-btnBuscar.addEventListener('click', async() =>{
-    const inputBuscar = document.getElementById('inputId').value;
+    document.getElementById("inputId").value = id;
+  } else {
+    alert("Id no encontrado");
+  }
+});
 
-    const resp = await fetch(endpoint);
-    const data = await resp.json();
+btnModificar.addEventListener("click", async () => {
+  const dataModificar = capturarDatos();
+  const { url, nombre, autor, editorial } = dataModificar;
 
-    const buscado = data.find(l => l.id === inputBuscar);
-
-    if(buscado !== undefined){
-        const { id, nombre, url, autor, editorial } = buscado;
-
-        document.getElementById('inputUrl').value = url;
-        document.getElementById('inputNombre').value = nombre;
-        document.getElementById('inputAutor').value = autor;
-        document.getElementById('inputEditorial').value = autor;
-        document.getElementById('inputId').value = id;
-    }else{
-        alert("Id no encontrado")
-    }
-
-})
+  if ((url === "", nombre === "", autor === "", editorial === "")) {
+    alert("Debe llenat todos los campos");
+  } else {
+    const id = document.getElementById("inputId").value;
+    await fetch(endpoint + id, {
+      method: "PUT",
+      body: JSON.stringify(dataModificar),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    });
+  }
+});
