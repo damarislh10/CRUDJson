@@ -1,4 +1,4 @@
-# CRUDJson
+# CRUD Json-server Libros
 
 Integrantes:
 - Damaris Hernandez
